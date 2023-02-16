@@ -1,0 +1,32 @@
+﻿@model LoginDto
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="flex justify-center transition-all">
+    <form asp-action="Login" asp-controller="Account" method="post">
+        <div class="flex flex-col gap-4 w-96">
+            <div asp-validation-summary="ModelOnly" class="text-error text-sm">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="Email" class="font-bold before:content-['-']"></label>
+                <input asp-for="Email" placeholder="Email..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="Email" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="Password" class="font-bold before:content-['-']"></label>
+                <input asp-for="Password" placeholder="Password..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="Password" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex justify-end">
+                <button class="btn btn-outline btn-sm btn-secondary">Button</button>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-2">
+                <a class="link link-secondary" href="/account/register">Register</a>
+                <a class="link link-secondary" href="/account/forgotpassword">Forgot Password</a>
+            </div>
+        </div>
+    </form>
+</div>
+

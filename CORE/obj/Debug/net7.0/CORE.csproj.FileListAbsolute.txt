@@ -1,0 +1,12 @@
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\CORE.csproj.AssemblyReference.cache
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\CORE.GeneratedMSBuildEditorConfig.editorconfig
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\CORE.AssemblyInfoInputs.cache
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\CORE.AssemblyInfo.cs
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\CORE.csproj.CoreCompileInputs.cache
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\bin\Debug\net7.0\CORE.deps.json
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\bin\Debug\net7.0\CORE.dll
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\bin\Debug\net7.0\CORE.pdb
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\CORE.dll
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\refint\CORE.dll
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\CORE.pdb
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\CORE\obj\Debug\net7.0\ref\CORE.dll

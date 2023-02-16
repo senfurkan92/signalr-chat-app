@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "IJCFlNbL8deXc+AYvAZSkzZuO50ORnRJJY+goX8DYQ7ALqxX7UZHz4+mlK1O9F2RluSoZMAduNXX5wHHo89f0Q==",
+  "success": true,
+  "projectFilePath": "D:\\_yazilim\\dotnet\\udemy\\signalr\\004_ChatApp\\DTO\\DTO.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\furka\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
+    "C:\\Users\\furka\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
+    "C:\\Users\\furka\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

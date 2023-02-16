@@ -1,0 +1,12 @@
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\bin\Debug\net7.0\DTO.deps.json
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\bin\Debug\net7.0\DTO.dll
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\bin\Debug\net7.0\DTO.pdb
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\DTO.csproj.AssemblyReference.cache
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\DTO.GeneratedMSBuildEditorConfig.editorconfig
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\DTO.AssemblyInfoInputs.cache
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\DTO.AssemblyInfo.cs
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\DTO.csproj.CoreCompileInputs.cache
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\DTO.dll
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\refint\DTO.dll
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\DTO.pdb
+D:\_yazilim\dotnet\udemy\signalr\004_ChatApp\DTO\obj\Debug\net7.0\ref\DTO.dll

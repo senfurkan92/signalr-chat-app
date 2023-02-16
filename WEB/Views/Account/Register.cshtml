@@ -1,0 +1,87 @@
+﻿@model RegisterDto
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="flex justify-center transition-all">
+    <form asp-action="Register" asp-controller="Account" method="post" enctype="multipart/form-data">
+        <div class="flex flex-col gap-4 w-96">
+            <div asp-validation-summary="ModelOnly" class="text-error text-sm">
+            </div>
+            <div class="flex justify-center">
+                <div class="relative w-32 h-32 rounded-full bg-base-200 outline-dashed outline-2 outline-offset-2 cursor-pointer" id="file-upload-div"
+                     style="background-origin:border-box; background-position: top; background-repeat:no-repeat; background-size: cover">
+                    <input asp-for="Photo" type="file" id="file-upload-input" hidden />
+                    <div class="absolute opacity-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[3]">
+                        <span id="file-upload-plus">+</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="Name" class="font-bold before:content-['-']"></label>
+                <input asp-for="Name" placeholder="Name..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="Name" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="Surname" class="font-bold before:content-['-']"></label>
+                <input asp-for="Surname" placeholder="Surname..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="Surname" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="PhoneNumber" class="font-bold before:content-['-']"></label>
+                <input asp-for="PhoneNumber" placeholder="PhoneNumber..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="PhoneNumber" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="Email" class="font-bold before:content-['-']"></label>
+                <input asp-for="Email" placeholder="Email..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="Email" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="Password" class="font-bold before:content-['-']"></label>
+                <input asp-for="Password" placeholder="Password..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="Password" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label asp-for="RePassword" class="font-bold before:content-['-']"></label>
+                <input asp-for="RePassword" placeholder="Password (check)..." class="input input-bordered invalid:bg-red-50 invalid:border-red-200" />
+                <span asp-validation-for="RePassword" class="ml-4 text-error text-sm"></span>
+            </div>
+            <div class="flex justify-end">
+                <button class="btn btn-outline btn-sm btn-secondary">Button</button>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-2">
+                <a class="link link-secondary" href="/account/login">Login</a>
+                <a class="link link-secondary" href="/account/forgotpassword">Forgot Password</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        var uploadDiv = document.getElementById("file-upload-div");
+        var inputUpload = document.getElementById("file-upload-input");
+        var plusIcon = document.getElementById("file-upload-plus")
+
+        uploadDiv.addEventListener('click', function () {
+            inputUpload.click();
+        })
+
+        inputUpload.addEventListener('change', (e) => {
+            if (e.target.files.length>0)
+            {
+                var blobUrl = URL.createObjectURL(e.target.files[0])
+                uploadDiv.style.backgroundImage = `url('${blobUrl}')`
+                plusIcon.innerText = ""
+            }
+            else 
+            {
+                uploadDiv.style.backgroundImage = null
+                plusIcon.innerText = "+"
+            }
+        })
+    </script>
+}
+

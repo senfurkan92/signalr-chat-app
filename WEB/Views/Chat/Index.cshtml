@@ -1,0 +1,178 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="vm" class="grid grid-cols-8 max-h-full">
+    <div class="col-span-2 grid grid-rows-[max-content_max-content_auto] gap-2 max-h-full">
+        <h2 class="text-2xl font-bold pt-2 px-2">Chats</h2>
+        <div class="form-control px-2">
+            <div class="input-group input-group-sm">
+                <input type="text" placeholder="Search…" v-model="searchInput" class="input input-bordered input-sm w-full focus:outline-none" />
+                <button class="btn btn-square btn-sm bg-base-300 border-transparent hover:border-transparent hover:bg-base-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </button>
+          </div>
+        </div>
+        <div class="h-[calc(100vh-146px-86px)] overflow-auto mx-2">
+            <div v-if="users.length < 1" class="h-full">
+                <div class="bg-white">
+                    <div class="flex justify-center items-center">
+                        <img class="h-16 w-16" src="https://icons8.com/preloaders/preloaders/1488/Iphone-spinner-2.gif" alt="spinner">
+                    </div>
+                </div>
+            </div>
+            <div v-else class="flex flex-col gap-2">
+                <template v-for="user in filteredUsersList" v-bind:key="user.Id">
+                    <button v-on:click="chatWith(user.id)" class="group flex items-center gap-2 hover:bg-base-200 py-2 px-4 rounded-md transition-all duration-500 select-none">
+                        <div class="avatar transition-all duration-500 group-hover:-rotate-1 group-hover:scale-105">
+                            <div v-bind:class="`w-16 rounded-full ring ${onlineIds.includes(user.id)? 'ring-success': 'ring-error'} ring-offset-base-100 ring-offset-2`">
+                                <img v-bind:src="user.photoPath ? user.photoPath : 'https://merriam-webster.com/assets/mw/images/article/art-wap-article-main/egg-3442-e1f6463624338504cd021bf23aef8441@1x.jpg'" class="origin-top" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="text-base-content/80 transition-all duration-500 group-hover:translate-x-3">
+                                {{user.userName}}
+                            </div>
+                        </div>
+                    </button>
+                </template>
+            </div>     
+        </div>
+    </div>
+    <div v-if="!!currentChat.id" class="col-span-6 grid grid-rows-[max-content_max-content_auto]">
+        <div class="flex gap-2 items-center p-2 border-b">
+            <div class="avatar transition-all duration-500 group-hover:-rotate-3 group-hover:-skew-y-3">
+                <div class="w-16 mask mask-squircle">
+                    <img v-bind:src="currentChat.photoPath" />
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold pt-2 px-2 tracking-wide">
+                <span>{{currentChat.userName}}</span>
+            </h3>
+        </div>
+        <div class="px-6 pt-2 ">
+            <div v-if="messages.length < 1" class="flex flex-col gap-2 h-[calc(100vh-161px-105px-70px)] overflow-auto">
+                <div class="flex justify-start">
+                    <div class="shadow-lg py-2 px-4 rounded-md w-full text-center border">
+                        <span>let's start a conversation</span>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="flex flex-col gap-2 h-[calc(100vh-161px-105px-70px)] overflow-auto">
+                @for(var i = 0; i < 50; i++)
+                {
+                    <div class="flex justify-start">
+                        <div class="alert alert-warning shadow py-2 px-4 rounded-md w-max max-w-[48%]">
+                            <div>
+                                <span>New mail arrived.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-start">
+                        <div class="alert shadow py-2 px-4 rounded-md w-max max-w-[48%]">
+                            <div>
+                                <span>New mail arrived.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <div class="alert shadow py-2 px-4 rounded-md w-max max-w-[48%]">
+                            <div>
+                                <span>New mail arrived.</span>
+                            </div>
+                        </div>
+                    </div>                 
+                }
+            </div>
+            <div class="py-2">
+                <div class="form-control">
+                    <div class="input-group">
+                        <textarea placeholder="Bio" class="textarea textarea-bordered textarea-sm w-full leading-tight resize-none h-20 hover:outline-none focus:outline-none"></textarea>
+                        <button class="btn btn-primary h-20 select-none">Go</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const { createApp } = Vue
+
+    const vm = createApp({
+        data() {
+            return {
+                users: [],
+                currentChat: {
+                    userId: null,
+                    userName: null,
+                    photoPath: null
+                },
+                activeId: '@(User.Identity.Name)',
+                messages: [],
+                searchInput: '',
+                connection: null,
+                onlineIds: [],
+            }
+        },
+        computed: {
+            filteredUsersList(){
+                const filterText = this.searchInput ?? ''
+                return this.users.filter(x => {
+                    return x.userName.toLowerCase().includes(filterText)
+                })
+            }
+        },
+        mounted() {
+            this.chatUsers()
+            this.socketConnect()
+        },
+        methods: {
+            chatUsers() {
+                fetch(`/Chat/GetChatUser`)
+                    .then(x => x.json())
+                    .then(x => {
+                        this.users = x
+                    })
+            },
+            chatWith(id) {
+                fetch(`/Chat/GetChatStart?id=${id}`)
+                    .then(x => x.json())
+                    .then(x => {
+                        this.currentChat.id = x.id
+                        this.currentChat.userName = x.userName
+                        this.currentChat.photoPath = !!x.photoPath ? x.photoPath : 'https://merriam-webster.com/assets/mw/images/article/art-wap-article-main/egg-3442-e1f6463624338504cd021bf23aef8441@1x.jpg'
+                    })
+            },
+            searchUser(e) {
+                console.log(e.target.value)
+            },
+            socketConnect() {
+                this.connection = new signalR.HubConnectionBuilder().withUrl("/services/chatHub").build()              
+                this.connection.start().then(function(){
+                    console.log("Bağlantı sağlandı.");
+                    vm.followOnline()
+                    vm.followOffline()
+                }).catch(function (err) {
+                    console.log("Hata oluştu:" + err);
+                    setTimeout(() => {
+                        vm.socketConnect()
+                    }, 3000)
+                })
+            },
+            followOnline() {
+                this.connection.on('online', (id) => {
+                        if(!this.onlineIds.includes(id)) {
+                            this.onlineIds.push(id)
+                        }
+                    })
+            },
+            followOffline() {
+                this.connection.on('offline', (id) => {
+                        this.onlineIds = this.onlineIds.filter(x => x != id)
+                    })
+            },
+        }
+    }).mount('#vm')
+</script>
