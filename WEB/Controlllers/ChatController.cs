@@ -17,6 +17,7 @@ namespace WEB.Controlllers
 
         public IActionResult Index()
         {
+            TempData["CurrentUserId"] = _userManager.FindByNameAsync(User.Identity.Name).Result.Id;
             return View();
         }
 

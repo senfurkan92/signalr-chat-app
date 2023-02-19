@@ -25,7 +25,7 @@
                 <template v-for="user in filteredUsersList" v-bind:key="user.Id">
                     <button v-on:click="chatWith(user.id)" class="group flex items-center gap-2 hover:bg-base-200 py-2 px-4 rounded-md transition-all duration-500 select-none">
                         <div class="avatar transition-all duration-500 group-hover:-rotate-1 group-hover:scale-105">
-                            <div v-bind:class="`w-16 rounded-full ring ${onlineIds.includes(user.id)? 'ring-success': 'ring-error'} ring-offset-base-100 ring-offset-2`">
+                            <div v-bind:class="`w-16 rounded-full ring ${Object.keys(onlineIds).includes(user.id+'')? 'ring-success': 'ring-error'} ring-offset-base-100 ring-offset-2`">
                                 <img v-bind:src="user.photoPath ? user.photoPath : 'https://merriam-webster.com/assets/mw/images/article/art-wap-article-main/egg-3442-e1f6463624338504cd021bf23aef8441@1x.jpg'" class="origin-top" />
                             </div>
                         </div>
@@ -87,8 +87,8 @@
             <div class="py-2">
                 <div class="form-control">
                     <div class="input-group">
-                        <textarea placeholder="Bio" class="textarea textarea-bordered textarea-sm w-full leading-tight resize-none h-20 hover:outline-none focus:outline-none"></textarea>
-                        <button class="btn btn-primary h-20 select-none">Go</button>
+                        <textarea v-model="text" placeholder="Bio" class="textarea textarea-bordered textarea-sm w-full leading-tight resize-none h-20 hover:outline-none focus:outline-none"></textarea>
+                        <button v-on:click="sendMessage" class="btn btn-primary h-20 select-none">Go</button>
                     </div>
                 </div>
             </div>
@@ -105,12 +105,13 @@
             return {
                 users: [],
                 currentChat: {
-                    userId: null,
+                    id: null,
                     userName: null,
                     photoPath: null
                 },
-                activeId: '@(User.Identity.Name)',
+                activeId: '@TempData["CurrentUserId"]',
                 messages: [],
+                text:'',
                 searchInput: '',
                 connection: null,
                 onlineIds: [],
@@ -119,9 +120,14 @@
         computed: {
             filteredUsersList(){
                 const filterText = this.searchInput ?? ''
-                return this.users.filter(x => {
-                    return x.userName.toLowerCase().includes(filterText)
-                })
+                return this.users
+                    .filter(x => x.id + '' != this.activeId)
+                    .filter(x => {
+                        return Object.keys(this.onlineIds).includes(x.id + '')
+                    })
+                    .filter(x => {
+                        return x.userName.toLowerCase().includes(filterText)
+                    })
             }
         },
         mounted() {
@@ -145,15 +151,12 @@
                         this.currentChat.photoPath = !!x.photoPath ? x.photoPath : 'https://merriam-webster.com/assets/mw/images/article/art-wap-article-main/egg-3442-e1f6463624338504cd021bf23aef8441@1x.jpg'
                     })
             },
-            searchUser(e) {
-                console.log(e.target.value)
-            },
             socketConnect() {
                 this.connection = new signalR.HubConnectionBuilder().withUrl("/services/chatHub").build()              
                 this.connection.start().then(function(){
-                    console.log("Bağlantı sağlandı.");
                     vm.followOnline()
                     vm.followOffline()
+                    vm.receiveMessage()
                 }).catch(function (err) {
                     console.log("Hata oluştu:" + err);
                     setTimeout(() => {
@@ -162,16 +165,25 @@
                 })
             },
             followOnline() {
-                this.connection.on('online', (id) => {
-                        if(!this.onlineIds.includes(id)) {
-                            this.onlineIds.push(id)
-                        }
+                this.connection.on('online', (id, connectedIds) => {
+                        this.onlineIds = JSON.parse(connectedIds)
                     })
             },
             followOffline() {
-                this.connection.on('offline', (id) => {
-                        this.onlineIds = this.onlineIds.filter(x => x != id)
+                this.connection.on('offline', (id, connectedIds) => {
+                        delete this.onlineIds[id + '']
                     })
+            },
+            sendMessage() {
+                //console.log(this.onlineIds[this.currentChat.id], this.text)
+                //this.connection.invoke('sendMessage', this.onlineIds[this.currentChat.id], this.text)
+                console.log(this.currentChat.id + '', this.text)
+                this.connection.invoke('sendMessage', this.currentChat.id + '', this.text)
+            },
+            receiveMessage() {
+                this.connection.on('receiveMessage', (senderId, message) => {
+                    console.log(senderId, message)
+                })
             },
         }
     }).mount('#vm')
