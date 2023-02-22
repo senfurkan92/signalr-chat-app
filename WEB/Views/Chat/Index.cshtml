@@ -51,7 +51,7 @@
             </h3>
         </div>
         <div class="px-6 pt-2 ">
-            <div v-if="messages.length < 1" class="flex flex-col gap-2 h-[calc(100vh-161px-105px-70px)] overflow-auto">
+            <div v-if="filteredMessagesList.length < 1" class="flex flex-col gap-2 h-[calc(100vh-161px-105px-70px)] overflow-auto">
                 <div class="flex justify-start">
                     <div class="shadow-lg py-2 px-4 rounded-md w-full text-center border">
                         <span>let's start a conversation</span>
@@ -59,30 +59,22 @@
                 </div>
             </div>
             <div v-else class="flex flex-col gap-2 h-[calc(100vh-161px-105px-70px)] overflow-auto">
-                @for(var i = 0; i < 50; i++)
-                {
-                    <div class="flex justify-start">
+                <template v-for="msg, index in filteredMessagesList" v-key="index">
+                    <div v-if="msg.from != activeId" class="flex justify-start">
                         <div class="alert alert-warning shadow py-2 px-4 rounded-md w-max max-w-[48%]">
                             <div>
-                                <span>New mail arrived.</span>
+                                <span>{{msg.text}}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-start">
+                    <div v-else class="flex justify-end">
                         <div class="alert shadow py-2 px-4 rounded-md w-max max-w-[48%]">
                             <div>
-                                <span>New mail arrived.</span>
+                                <span>{{msg.text}}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-end">
-                        <div class="alert shadow py-2 px-4 rounded-md w-max max-w-[48%]">
-                            <div>
-                                <span>New mail arrived.</span>
-                            </div>
-                        </div>
-                    </div>                 
-                }
+                </template>
             </div>
             <div class="py-2">
                 <div class="form-control">
@@ -128,6 +120,9 @@
                     .filter(x => {
                         return x.userName.toLowerCase().includes(filterText)
                     })
+            },
+            filteredMessagesList(){
+                return this.messages.filter(x => x.to == this.currentChat.id || x.from == this.currentChat.id)
             }
         },
         mounted() {
@@ -175,14 +170,24 @@
                     })
             },
             sendMessage() {
-                //console.log(this.onlineIds[this.currentChat.id], this.text)
-                //this.connection.invoke('sendMessage', this.onlineIds[this.currentChat.id], this.text)
-                console.log(this.currentChat.id + '', this.text)
+                let msg = {
+                    from: this.activeId,
+                    to: this.currentChat.id,
+                    text: this.text,
+                    date: new Date()
+                }
+                this.messages.push(msg)
                 this.connection.invoke('sendMessage', this.currentChat.id + '', this.text)
             },
             receiveMessage() {
                 this.connection.on('receiveMessage', (senderId, message) => {
-                    console.log(senderId, message)
+                    let msg = {
+                        to: this.activeId,
+                        from: senderId,
+                        text: message,
+                        date: new Date()
+                    }
+                    this.messages.push(msg)
                 })
             },
         }
